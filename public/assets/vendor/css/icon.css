@@ -1,0 +1,95 @@
+.rating {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+.rating label {
+    color: #ddd;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.rating label:before {
+    content: "\2605";
+}
+
+.rating input[type="radio"]:checked ~ label {
+    color: gold; /* Color of selected stars */
+}
+
+.navbar-icon {
+    margin-right: 1rem;
+    /* Adjust as needed */
+}
+
+@media (max-width: 1199.98px) {
+    .navbar-icon {
+        margin-right: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .input-group {
+        margin-left: 10px;
+    }
+
+    .my-auto {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-primary.my-auto.ms-2 {
+        height: auto;
+        padding: 5px 10px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.toast {
+    border: 2px solid black;
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 10px;
+    animation: fadeIn 0.5s, fadeOut 0.5s 5s !important;
+}
+
+.toast-close-button {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: none;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer !important;
+    color: black !important;
+}
+
+.toast-close-button i {
+    font-size: 16px;
+}
