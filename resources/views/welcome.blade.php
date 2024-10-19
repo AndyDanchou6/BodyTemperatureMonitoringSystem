@@ -60,7 +60,7 @@
                     id="layout-navbar">
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <div class="navbar-nav align-items-center">
-                            <div class="nav-item d-flex align-items-center" style="font-size: 1.5rem; word-wrap: break-word; overflow-wrap: break-word;">
+                            <div class="nav-item d-flex align-items-center" style="font-size: 25px; word-wrap: break-word; overflow-wrap: break-word;">
                                 Body Temperature Monitoring System
                             </div>
                         </div>
@@ -137,17 +137,6 @@
                     <!-- Content -->
 
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="card-header d-flex">
-                            <form action="" method="GET" class="me-2">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Search Student ID..." value="">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class='bx bx-search-alt-2'></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card mb-4">
@@ -162,23 +151,21 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="student_id" class="form-label">Student ID</label>
-                                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="21-008083" aria-describedby="name" readonly />
+                                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="21-008083" readonly />
                                             </div>
                                             <div class="mb-3">
                                                 <label for="name" class="form-label">Name</label>
-                                                <input type="text" class="form-control" name="name" id="name" placeholder="John Doe" aria-describedby="name" readonly />
+                                                <input type="text" class="form-control" name="name" id="name" placeholder="John Doe" readonly />
                                             </div>
                                             <div class="mb-3">
                                                 <label for="course" class="form-label">Course</label>
-                                                <input type="text" class="form-control" name="course" id="course" placeholder="BSIT" aria-describedby="name" readonly />
+                                                <input type="text" class="form-control" name="course" id="course" placeholder="BSIT" readonly />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="course" class="form-label">Age</label>
-                                                <input type="number" class="form-control" name="course" id="course" placeholder="19" aria-describedby="name" readonly />
+                                                <label for="year_level" class="form-label">Year Level</label>
+                                                <input type="number" class="form-control" name="year_level" id="year_level" placeholder="4" readonly />
                                             </div>
-                                            <!-- <div id="defaultFormControlHelp" class="form-text">
-                                                We'll never share your details with anyone else.
-                                            </div> -->
+
                                         </div>
                                     </div>
                                 </div>
