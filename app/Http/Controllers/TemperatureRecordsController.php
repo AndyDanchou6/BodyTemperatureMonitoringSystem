@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Temparature_records;
+use App\Models\Temperature_records;
 use Illuminate\Http\Request;
 
-class TemparatureRecordsController extends Controller
+class TemperatureRecordsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class TemparatureRecordsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Temparature_records $temparature_records)
+    public function show(Temperature_records $temperature_records)
     {
         //
     }
@@ -42,7 +42,7 @@ class TemparatureRecordsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Temparature_records $temparature_records)
+    public function edit(Temperature_records $temperature_records)
     {
         //
     }
@@ -50,7 +50,7 @@ class TemparatureRecordsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Temparature_records $temparature_records)
+    public function update(Request $request, Temperature_records $temperature_records)
     {
         //
     }
@@ -58,7 +58,7 @@ class TemparatureRecordsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Temparature_records $temparature_records)
+    public function destroy(Temperature_records $temperature_records)
     {
         //
     }
