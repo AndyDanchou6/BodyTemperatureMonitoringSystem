@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Temparature_records extends Model
+class Temperature_records extends Model
 {
     use HasFactory;
 
