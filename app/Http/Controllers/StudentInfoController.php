@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student_info;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Pusher\Pusher;
 
 class StudentInfoController extends Controller
 {
@@ -95,22 +96,53 @@ class StudentInfoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(String $student_info)
+    public function show(String $student_id)
     {
         try {
-            $student_info = Student_info::where('student_id', $student_info)
+            $student_info = Student_info::where('student_id', $student_id)
                 ->first();
 
-            if (empty($student_info)) {
+            if ($student_info) {
+                $pusher = new Pusher(
+                    env('PUSHER_APP_KEY'),
+                    env('PUSHER_APP_SECRET'),
+                    env('PUSHER_APP_ID'),
+                    [
+                        'cluster' => env('PUSHER_APP_CLUSTER'),
+                        'useTLS' => true,
+                    ]
+                );
+
+                $pusher->trigger('idSensor_channel', 'idSensor_channel', [
+                    'message' => 'Id detected. Student Found',
+                    'status' => 200,
+                    'data' => $student_info,
+                ]);
+
                 return response()->json([
-                    'message' => 'Student info not found',
+                    'message' => 'User Found',
+                    'data' => $student_info,
+                ], 200);
+            } else {
+                $pusher = new Pusher(
+                    env('PUSHER_APP_KEY'),
+                    env('PUSHER_APP_SECRET'),
+                    env('PUSHER_APP_ID'),
+                    [
+                        'cluster' => env('PUSHER_APP_CLUSTER'),
+                        'useTLS' => true,
+                    ]
+                );
+
+                $pusher->trigger('idSensor_channel', 'idSensor_channel', [
+                    'status' => 404,
+                    'message' => 'Id not recognized!',
+                ]);
+
+                return response()->json([
+                    'message' => 'ID not recognized!',
                 ], 404);
             }
-
-            return response()->json([
-                'message' => 'Student info found',
-                'data' => $student_info,
-            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage(),
