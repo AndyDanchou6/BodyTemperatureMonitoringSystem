@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('course')->nullable();
             $table->integer('year_level')->nullable();
+            $table->boolean('monitored')->default(0);
             $table->timestamps();
         });
     }

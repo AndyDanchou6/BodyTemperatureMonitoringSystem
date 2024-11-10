@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StudentInfoController;
+use App\Http\Controllers\TemperatureRecordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('student_info')->group(function () {
     Route::post('/store', [StudentInfoController::class, 'store']);
     Route::get('/all', [StudentInfoController::class, 'index']);
-    Route::get('/show/{student_id}', [StudentInfoController::class, 'show']);
+    Route::get('/show/{id}', [StudentInfoController::class, 'show']);
     Route::put('/update', [StudentInfoController::class, 'update']);
+});
+
+Route::prefix('temperature_records')->group(function () {
+    Route::post('/temp_reading', [TemperatureRecordsController::class, 'temperatureReading']);
 });
