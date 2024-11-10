@@ -36,13 +36,13 @@ class StudentInfoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
-    {
-        return response()->json([
-            'message' => 'test',
-            'request' => $request->student_id,
-        ], 200);
-    }
+    // public function create(Request $request)
+    // {
+    //     return response()->json([
+    //         'message' => 'test',
+    //         'request' => $request->student_id,
+    //     ], 200);
+    // }
 
     /**
      * Store a newly created resource in storage.
