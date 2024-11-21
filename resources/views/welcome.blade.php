@@ -145,7 +145,7 @@
                                         <div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-auto text-center">
-                                                    <img src="{{ asset('assets/img/avatars/1.png') }}" id="change_avatar" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; border-radius: 50%;">
+                                                    <img src="{{ asset('assets/img/admin.jpg') }}" id="profile_img" alt="Student Avatar" class="rounded-circle" style="width: 150px; height: 150px;">
                                                     <div style="margin-top: 5px;"><label>Avatar</label></div>
                                                 </div>
                                             </div>
@@ -231,6 +231,7 @@
                 if (data.status == 200) {
                     console.log(data.data.student_id);
 
+                    document.getElementById('profile_img').src = "{{ asset('storage/') }}" + "/" + data.data.avatar || '';
                     document.getElementById('student_id').value = data.data.student_id;
                     document.getElementById('name').value = data.data.name;
                     document.getElementById('course').value = data.data.course;
