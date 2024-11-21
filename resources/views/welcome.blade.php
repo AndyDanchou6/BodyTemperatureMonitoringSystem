@@ -145,25 +145,25 @@
                                         <div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-auto text-center">
-                                                    <img src="{{ asset('assets/img/avatars/1.png') }}" id="change_avatar" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; border-radius: 50%;">
+                                                    <img src="{{ asset('assets/img/admin.jpg') }}" id="profile_img" alt="Student Avatar" class="rounded-circle" style="width: 150px; height: 150px;">
                                                     <div style="margin-top: 5px;"><label>Avatar</label></div>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="student_id" class="form-label">Student ID</label>
-                                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="21-008083" readonly />
+                                                <input type="text" class="form-control text-primary" name="student_id" id="student_id" placeholder="21-008083" readonly />
                                             </div>
                                             <div class="mb-3">
                                                 <label for="name" class="form-label">Name</label>
-                                                <input type="text" class="form-control" name="name" id="name" placeholder="John Doe" readonly />
+                                                <input type="text" class="form-control text-primary" name="name" id="name" placeholder="John Doe" readonly />
                                             </div>
                                             <div class="mb-3">
                                                 <label for="course" class="form-label">Course</label>
-                                                <input type="text" class="form-control" name="course" id="course" placeholder="BSIT" readonly />
+                                                <input type="text" class="form-control text-primary" name="course" id="course" placeholder="BSIT" readonly />
                                             </div>
                                             <div class="mb-3">
                                                 <label for="year_level" class="form-label">Year Level</label>
-                                                <input type="number" class="form-control" name="year_level" id="year_level" placeholder="4" readonly />
+                                                <input type="number" class="form-control text-primary" name="year_level" id="year_level" placeholder="4" readonly />
                                             </div>
 
                                         </div>
@@ -175,18 +175,15 @@
                                     <h5 class="card-header">Temparature Details</h5>
                                     <div class="card-body">
                                         <div>
-                                            <div class="mb-3">
-                                                <label for=temperature" class="form-label">Temparature</label>
-                                                <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control">
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="created_at" class="form-label">Timestamp</label>
-                                                <input type="date" class="form-control" name="created_at" id="created_at" placeholder="John Doe" aria-describedby="name" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <button class="btn btn-success" type="submit">Submit</button>
-                                            </div>
+                                            <form id="temp-reading" method="POST">
+                                                <div class="mb-3">
+                                                    <label for=temperature" class="form-label">Temparature</label>
+                                                    <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <button class="btn btn-success" type="submit">Submit</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -219,6 +216,60 @@
         </script>
 
         <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script>
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+                cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            });
+
+            var scanCard = pusher.subscribe('idSensor_channel');
+            scanCard.bind('idSensor_channel', function(data) {
+
+                if (data.status == 200) {
+                    console.log(data.data.student_id);
+
+                    document.getElementById('profile_img').src = "{{ asset('storage/') }}" + "/" + data.data.avatar || '';
+                    document.getElementById('student_id').value = data.data.student_id;
+                    document.getElementById('name').value = data.data.name;
+                    document.getElementById('course').value = data.data.course;
+                    document.getElementById('year_level').value = data.data.year_level;
+
+                }
+                //  else {
+                // Registration
+                // }
+            });
+            scanCard.bind('pusher:subscription_error', function(status) {
+                console.error('Subscription error:', status);
+            });
+        </script>
+        <script>
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+                cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            });
+
+            var tempRead = pusher.subscribe('temp_reading_channel');
+            tempRead.bind('temp_reading_channel', function(data) {
+
+                if (data.status == 200) {
+                    console.log(data.data.student_id);
+
+                    document.getElementById('inputFahrenheit').value = data.data;
+
+                }
+                //  else {
+                // Registration
+                // }
+            });
+            tempRead.bind('pusher:subscription_error', function(status) {
+                console.error('Subscription error:', status);
+            });
+        </script>
 </body>
 
 </html>
