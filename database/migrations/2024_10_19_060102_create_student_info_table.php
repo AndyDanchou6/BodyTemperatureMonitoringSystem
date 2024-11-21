@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_info', function (Blueprint $table) {
             $table->id();
             $table->string('avatar')->nullable();
-            $table->string('student_id')->nullable();
+            $table->string('student_id')->unique();
             $table->string('name');
             $table->string('course')->nullable();
             $table->integer('year_level')->nullable();
