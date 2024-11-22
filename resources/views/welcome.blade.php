@@ -13,11 +13,12 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Body Temperature Monitoring System</title>
+    <title>Student Temperature Monitoring System</title>
 
     <meta name="description" content="" />
 
     <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/admin.jpg ') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -61,74 +62,34 @@
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <div class="navbar-nav align-items-center">
                             <div class="nav-item d-flex align-items-center" style="font-size: 25px; word-wrap: break-word; overflow-wrap: break-word;">
-                                Body Temperature Monitoring System
+                                Student Temperature Monitoring System
                             </div>
                         </div>
 
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
-
-
                             <!-- User -->
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                    <div class="avatar avatar-online">
-                                        <img src="{{ asset('assets/img/admin.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
-                                    </div>
+                                @if (Route::has('login'))
+                                @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('home') }}">
+                                    <i class="bx bx-dashboard text-primary"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar avatar-online">
-                                                        <img src="{{ asset('assets/img/admin.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">John Doe</span>
-                                                    <small class="text-muted">Admin</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bx bx-user me-2"></i>
-                                            <span class="align-middle">My Profile</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bx bx-cog me-2"></i>
-                                            <span class="align-middle">Settings</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="d-flex align-items-center align-middle">
-                                                <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                                                <span class="flex-grow-1 align-middle">Billing</span>
-                                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="auth-login-basic.html">
-                                            <i class="bx bx-power-off me-2"></i>
-                                            <span class="align-middle">Log Out</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
-                            <!--/ User -->
+                            @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">
+                                    <i class="bx bx-log-in text-danger"></i>
+                                </a>
+                            </li>
+                            @endauth
+                            @endif
                         </ul>
+                        </li>
+                        <!--/ User -->
+                        </ul>
+
                     </div>
                 </nav>
 
@@ -200,6 +161,7 @@
 
 
         <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+        <script src="{{ asset('sweetalert.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
         <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
         <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
@@ -225,8 +187,10 @@
                 cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
             });
 
+            pusher.unsubscribe('rfid-scanner_channel');
+
             var scanCard = pusher.subscribe('idSensor_channel');
-            scanCard.bind('idSensor_channel', function(data) {
+            scanCard.bind('id-detected', function(data) {
 
                 if (data.status == 200) {
                     console.log(data.data.student_id);
@@ -237,10 +201,14 @@
                     document.getElementById('course').value = data.data.course;
                     document.getElementById('year_level').value = data.data.year_level;
 
+                } else {
+                    swal({
+                        title: data.message,
+                        text: "Please register your RFID card or use a different one.",
+                        icon: "warning",
+                        button: "Ok",
+                    });
                 }
-                //  else {
-                // Registration
-                // }
             });
             scanCard.bind('pusher:subscription_error', function(status) {
                 console.error('Subscription error:', status);

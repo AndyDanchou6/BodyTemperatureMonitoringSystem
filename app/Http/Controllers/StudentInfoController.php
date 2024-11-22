@@ -178,7 +178,7 @@ class StudentInfoController extends Controller
                     ]
                 );
 
-                $pusher->trigger('rfid-scanner_channel', 'rfid-scanner_channel', [
+                $pusher->trigger('rfid-scanner_channel', 'rfid-scanned', [
                     'message' => 'RFID Card Scanned Successfully!',
                     'status' => 200,
                     'data' => $rfidTag,
@@ -199,7 +199,7 @@ class StudentInfoController extends Controller
                     ]
                 );
 
-                $pusher->trigger('rfid-scanner_channel', 'rfid-scanner_channel', [
+                $pusher->trigger('rfid-scanner_channel', 'rfid-scanned', [
                     'status' => 404,
                     'message' => 'Invalid RFID tag',
                 ]);
@@ -235,7 +235,7 @@ class StudentInfoController extends Controller
                     ]
                 );
 
-                $pusher->trigger('idSensor_channel', 'idSensor_channel', [
+                $pusher->trigger('idSensor_channel', 'id-detected', [
                     'message' => 'Id detected. Student Found',
                     'status' => 200,
                     'data' => $student_info,
@@ -256,13 +256,13 @@ class StudentInfoController extends Controller
                     ]
                 );
 
-                $pusher->trigger('idSensor_channel', 'idSensor_channel', [
+                $pusher->trigger('idSensor_channel', 'id-detected', [
                     'status' => 404,
-                    'message' => 'Id not recognized!',
+                    'message' => 'RFID Card Not Registered!',
                 ]);
 
                 return response()->json([
-                    'message' => 'ID not recognized!',
+                    'message' => 'RFID Card Not Registered!',
                 ], 404);
             }
         } catch (\Throwable $th) {

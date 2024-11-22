@@ -20,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [DashboardController::class, 'home'])->name('home');
+Route::get('/login', [DashboardController::class, 'loginForm'])->name('login');
 
 Route::prefix('students')->group(function () {
     Route::get('/index', [StudentInfoController::class, 'studentsIndex'])->name('students.index');
