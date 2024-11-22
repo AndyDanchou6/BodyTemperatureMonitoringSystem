@@ -43,6 +43,10 @@
                             <div id="rfid-warning" class="form-text hidden text-danger">
                                 <strong>Warning:</strong> This RFID Card is already registered. Please use a different RFID card.
                             </div>
+
+                            <div id="rfid-danger" class="form-text hidden text-danger">
+                                <strong>Danger:</strong> Failed to retrieve RFID CARD!, please try again.
+                            </div>
                         </div>
                     </div>
 
@@ -124,8 +128,10 @@
             cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
         });
 
+        pusher.unsubscribe('idSensor_channel');
+
         var scanCard = pusher.subscribe("rfid-scanner_channel");
-        scanCard.bind("rfid-scanner_channel", function(data) {
+        scanCard.bind("rfid-scanned", function(data) {
             if (data.status == 200) {
                 document.getElementById("student_id").value = data.data;
                 document.getElementById("rfid-warning").classList.add('hidden');
@@ -137,7 +143,7 @@
                 document.getElementById("success").classList.add('hidden');
                 document.getElementById("failed").classList.remove('hidden');
             } else {
-                console.error("Failed to retrieve RFID tag.");
+                document.getElementById("rfid-danger").classList.remove('hidden');
             }
         });
 

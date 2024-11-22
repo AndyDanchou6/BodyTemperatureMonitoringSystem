@@ -11,4 +11,9 @@ class DashboardController extends Controller
     {
         return view('home');
     }
+
+    public function loginForm()
+    {
+        return view('auth.login');
+    }
 }

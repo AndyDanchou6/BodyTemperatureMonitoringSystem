@@ -32,7 +32,7 @@
         <li>
           <div class="dropdown-divider"></div>
         </li>
-        <li>
+        <!-- <li>
           <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal">
             <i class="bx bx-user me-2"></i>
             <span class="align-middle">My Profile</span>
@@ -45,10 +45,10 @@
               <span class="flex-grow-1 align-middle">Billing</span>
             </span>
           </a>
-        </li>
-        <li>
+        </li> -->
+        <!-- <li>
           <div class="dropdown-divider"></div>
-        </li>
+        </li> -->
         <li>
           <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
             <i class="bx bx-power-off me-2"></i>
