@@ -29,6 +29,7 @@ Route::prefix('student_info')->group(function () {
 
 Route::prefix('temperature_records')->group(function () {
     Route::post('/temp_reading', [TemperatureRecordsController::class, 'temperatureReading']);
+    Route::post('/store', [TemperatureRecordsController::class, 'store']);
 });
 
 Route::post('/students/scan', [StudentInfoController::class, 'scan'])->name('scan');

@@ -28,7 +28,7 @@
 
                     @if($students->count() > 0)
                     @foreach ($students as $list)
-                    <tr>
+                    <tr class="student_info">
                         <td>{{ $loop->iteration }}</td>
                         <td>
                             @if($list->avatar)
@@ -37,16 +37,19 @@
                             <img src="{{ asset('assets/img/user.png') }}" style="width: 45px; height: 45px" alt="Default Avatar" class="rounded-circle">
                             @endif
                         </td>
-                        <td> <span class="badge bg-info">{{ $list->student_id }}</span></td>
+                        <td> <span class="id badge bg-info">{{ $list->student_id }}</span></td>
                         <td>{{ $list->name }}</td>
                         <td>{{ $list->course }}</td>
                         <td>{{ $list->year_level }}</td>
+
                         <td>
+                            <a class="bx bi-thermometer" href="{{ url('/students/tempRecords/' . $list->student_id) }}"></a>
                             <a class="bx bx-edit-alt me-1" href="{{ route('students.edit', $list->id) }}"></a>
 
                             <a href="#" class="bx bx-trash me-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{$list->id}}">
                                 <i class="fas fa-trash"></i>
                             </a>
+
                             @include('students.modal.delete')
                         </td>
                     </tr>
@@ -61,4 +64,17 @@
         </div>
     </div>
 </div>
+
+<!-- <script>
+    const studentInfoRows = document.querySelectorAll('.student_info');
+
+    studentInfoRows.forEach(info => {
+        info.addEventListener('click', function() {
+            let id = info.querySelector('.id').textContent;
+            // window.location.href = '/students/tempRecords/' + id;
+
+            console.log(info.querySelector('.id').textContent);
+        })
+    })
+</script> -->
 @endsection

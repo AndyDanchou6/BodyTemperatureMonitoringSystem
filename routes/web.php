@@ -29,4 +29,5 @@ Route::prefix('students')->group(function () {
     Route::post('/store', [StudentInfoController::class, 'store'])->name('students.store');
     Route::delete('/delete/{id}', [StudentInfoController::class, 'delete'])->name('students.delete');
     Route::put('/update/{id}', [StudentInfoController::class, 'update'])->name('students.update');
+    Route::get('/tempRecords/{id}', [StudentInfoController::class, 'tempRecords'])->name('students.tempRecords');
 });

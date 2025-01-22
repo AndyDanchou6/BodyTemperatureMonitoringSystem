@@ -96,7 +96,6 @@
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <!-- Content -->
-
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-md-6">
@@ -139,10 +138,10 @@
                                             <form id="temp-reading" method="POST">
                                                 <div class="mb-3">
                                                     <label for=temperature" class="form-label">Temparature</label>
-                                                    <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control">
+                                                    <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control" step="any">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <button class="btn btn-success" type="submit">Submit</button>
+                                                    <button class="btn btn-success" id="recordTempBtn" type="button">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -195,7 +194,7 @@
                 if (data.status == 200) {
                     console.log(data.data.student_id);
 
-                    document.getElementById('profile_img').src = "{{ asset('storage/') }}" + "/" + data.data.avatar || '';
+                    document.getElementById('profile_img').src = "{{ asset('/storage/') }}" + "/" + data.data.avatar || '';
                     document.getElementById('student_id').value = data.data.student_id;
                     document.getElementById('name').value = data.data.name;
                     document.getElementById('course').value = data.data.course;
@@ -225,14 +224,52 @@
             tempRead.bind('temp_reading_channel', function(data) {
 
                 if (data.status == 200) {
-                    console.log(data.data.student_id);
-
                     document.getElementById('inputFahrenheit').value = data.data;
 
+                    var student_id = document.querySelector('#student_id').value;
+                    var submitBtn = document.querySelector('#recordTempBtn');
+                    var studentTemp = {
+                        student_id: student_id,
+                        temp: data.data,
+                    }
+
+                    submitBtn.addEventListener('click', function() {
+                        fetch('https://bodytempmonitor.test/api/temperature_records/store', {
+                                method: 'POST', // Set the method to POST
+                                headers: {
+                                    'Content-Type': 'application/json', // The type of data you're sending
+                                },
+                                body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
+                            })
+                            .then(response => response.json()) // Parse the response as JSON
+                            .then(data => {
+                                console.log('Success:', data);
+                                if (data.status_code == 200) {
+                                    swal({
+                                        title: data.message,
+                                        text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " has been recorded",
+                                        icon: "success",
+                                        button: "Ok",
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    swal({
+                                        title: data.message,
+                                        text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " not recorded",
+                                        icon: "danger",
+                                        button: "Ok",
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+
+                    })
                 }
-                //  else {
-                // Registration
-                // }
             });
             tempRead.bind('pusher:subscription_error', function(status) {
                 console.error('Subscription error:', status);
