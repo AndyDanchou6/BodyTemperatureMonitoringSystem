@@ -25,28 +25,27 @@ class StudentInfoController extends Controller
         return view('students.create');
     }
 
-    // public function index()
-    // {
-    // try {
-    //     $allStudentInfo = Student_info::get();
+    public function index()
+    {
+        try {
+            $allStudentInfo = Student_info::get();
 
-    //     if (empty($allStudentInfo)) {
-    //         return response()->json([
-    //             'message' => 'No student info found',
-    //         ], 404)->header('Content-Type', 'application/json; charset=UTF-8');
-    //     }
+            if (empty($allStudentInfo)) {
+                return response()->json([
+                    'message' => 'No student info found',
+                ], 404)->header('Content-Type', 'application/json; charset=UTF-8');
+            }
 
-    //     return response()->json([
-    //         'message' => 'Student info found',
-    //         'data' => $allStudentInfo,
-    //     ], 200)->header('Content-Type', 'application/json; charset=UTF-8');
-    // } catch (\Throwable $th) {
-    //     return response()->json([
-    //         'message' => $th->getMessage(),
-    //     ], 500)->header('Content-Type', 'application/json; charset=UTF-8');
-    // }
-
-    // }
+            return response()->json([
+                'message' => 'Student info found',
+                'data' => $allStudentInfo,
+            ], 200)->header('Content-Type', 'application/json; charset=UTF-8');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+            ], 500)->header('Content-Type', 'application/json; charset=UTF-8');
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -362,6 +361,13 @@ class StudentInfoController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Show the form for editing the specified resource.
      */
+    public function tempRecords(string $id)
+    {
+        $studentTempRecords = Student_info::where('student_id', $id)->with('temperatureRecords')->first();
+
+        // dd($studentTempRecords);
+        return view('students.tempRecords', compact('studentTempRecords'));
+    }
 }

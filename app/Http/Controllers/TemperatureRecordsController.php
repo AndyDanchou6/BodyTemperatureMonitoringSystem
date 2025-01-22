@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student_info;
 use App\Models\Temperature_records;
 use Illuminate\Http\Request;
 use Pusher\Pusher;
@@ -29,7 +30,25 @@ class TemperatureRecordsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $student = Student_info::where('student_id', $request->input('student_id'))->first();
+        $id = $student->id;
+
+        $storeTemp = Temperature_records::create([
+            'student_id' => $id,
+            'body_temperature' => $request->input('temp')
+        ]);
+
+        if ($storeTemp->save()) {
+            return response()->json([
+                'message' => 'Student temperature recorded successfully',
+                'status_code' => 200,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Failed to record student temperature',
+                'status_code' => 400,
+            ], 400);
+        }
     }
 
     /**
@@ -64,7 +83,8 @@ class TemperatureRecordsController extends Controller
         //
     }
 
-    public function temperatureReading(Request $request) {
+    public function temperatureReading(Request $request)
+    {
         try {
             $tempReading = $request->input('temperature');
 
