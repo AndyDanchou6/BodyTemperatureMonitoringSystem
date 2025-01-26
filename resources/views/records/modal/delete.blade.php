@@ -12,7 +12,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     Close
                 </button>
-                <form id="deleteModal{{$list->id}}" action="{{ route('temperature.delete', $list->id) }}" method="POST">
+                <form id="deleteModal{{$list->id}}" action="{{ route('temperature.destroy', $list->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>

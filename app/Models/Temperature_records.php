@@ -16,6 +16,6 @@ class Temperature_records extends Model
 
     public function studentInfo()
     {
-        return $this->belongsTo(Student_info::class);
+        return $this->belongsTo(Student_info::class, 'student_id');
     }
 }

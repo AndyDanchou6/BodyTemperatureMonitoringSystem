@@ -10,9 +10,7 @@
     @endif
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-4">
-            <h4 style="margin: auto 0;">Student Info</h4>
-
-            <a href="{{ route('students.create') }}" class="btn btn-primary my-auto ms-2 ml-2s">Register New Student</a>
+            <h4 style="margin: auto 0;">List of all temperature records</h4>
         </div>
 
         <div class="table-responsive text-nowrap">
@@ -20,47 +18,34 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Avatar</th>
-                        <th>Student_id</th>
-                        <th>Name</th>
-                        <th>Course</th>
-                        <th>Year Level</th>
+                        <th>Student Name</th>
+                        <th>Temperature</th>
+                        <th>Date Recorded</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @if($students->count() > 0)
-                    @foreach ($students as $list)
+                    @if($temperature->count() > 0)
+                    @foreach ($temperature as $list)
                     <tr class="student_info">
                         <td>{{ $loop->iteration }}</td>
+                        <td>{{ $list->studentInfo->name }}</td>
+                        <td>{{ $list->body_temperature }} &deg;C</td>
+                        <td>{{ $list->created_at->format('F d, Y h:i a') }}</td>
                         <td>
-                            @if($list->avatar)
-                            <img src="{{ asset('storage/' . $list->avatar) }}" style="width: 45px; height: 45px" alt="User Avatar" class="rounded-circle">
-                            @else
-                            <img src="{{ asset('assets/img/user.png') }}" style="width: 45px; height: 45px" alt="Default Avatar" class="rounded-circle">
-                            @endif
-                        </td>
-                        <td> <span class="id badge bg-info">{{ $list->student_id }}</span></td>
-                        <td>{{ $list->name }}</td>
-                        <td>{{ $list->course }}</td>
-                        <td>{{ $list->year_level }}</td>
-
-                        <td>
-                            <a class="bx bi-thermometer" href="{{ url('/students/tempRecords/' . $list->student_id) }}"></a>
-                            <a class="bx bx-edit-alt me-1" href="{{ route('students.edit', $list->id) }}"></a>
 
                             <a href="#" class="bx bx-trash me-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{$list->id}}">
                                 <i class="fas fa-trash"></i>
                             </a>
 
-                            @include('students.modal.delete')
+                            @include('records.modal.delete')
                         </td>
                     </tr>
                     @endforeach
                     @else
                     <tr>
-                        <td colspan="7" class="text-center">No Students Record found!</td>
+                        <td colspan="7" class="text-center">No Temperature Record found!</td>
                     </tr>
                     @endif
                 </tbody>

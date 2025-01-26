@@ -49,6 +49,28 @@
 </head>
 
 <body>
+    <div id="rfidOverlay" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 9999;
+        text-align: center;
+        padding-top: 20%;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    ">
+        Waiting for RFID card scanning...
+        <div>
+            <div class="spinner-border spinner-border-lg text-danger" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+        </div>
+    </div>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar layout-without-menu">
         <div class="layout-container">
@@ -180,6 +202,16 @@
 
         <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <script>
+            function showOverlay() {
+                document.getElementById("rfidOverlay").style.display = "block";
+            }
+
+            function hideOverlay() {
+                document.getElementById("rfidOverlay").style.display = "none";
+            }
+
+            showOverlay();
+
             Pusher.logToConsole = true;
 
             var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {

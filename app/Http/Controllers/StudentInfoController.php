@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student_info;
+use App\Models\Temperature_records;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Pusher\Pusher;
@@ -150,6 +151,15 @@ class StudentInfoController extends Controller
         $students->delete();
 
         return redirect()->route('students.index')->with('success', 'Student Record Successfully Deleted');
+    }
+
+    public function TemperatureDestroy(string $id)
+    {
+        $temperatureID = Temperature_records::findOrFail($id);
+
+        $temperatureID->delete();
+
+        return redirect()->route('students.index')->with('success', 'Temperature Successfully Deleted');
     }
 
     public function scan(Request $request)
