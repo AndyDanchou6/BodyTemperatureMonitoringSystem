@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentInfoController;
@@ -19,10 +20,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', [DashboardController::class, 'home'])->name('home');
-Route::get('/login', [DashboardController::class, 'loginForm'])->name('login');
 
-Route::prefix('students')->group(function () {
+Route::get('/home', [DashboardController::class, 'home'])->name('home')->middleware('auth');
+
+
+Route::get('/login', [DashboardController::class, 'loginForm'])->name('login')->middleware('guest');
+Route::post('/loginHandler', [AuthController::class, 'loginHandler'])->name('login.handler')->middleware('guest');
+
+Route::post('/logout', [AuthController::class, 'logoutHandler'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->prefix('students')->group(function () {
     Route::get('/index', [StudentInfoController::class, 'studentsIndex'])->name('students.index');
     Route::get('/create', [StudentInfoController::class, 'create'])->name('students.create');
     Route::get('/edit/{id}', [StudentInfoController::class, 'edit'])->name('students.edit');
