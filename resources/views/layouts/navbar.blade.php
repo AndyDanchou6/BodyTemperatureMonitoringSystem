@@ -50,7 +50,7 @@
           <div class="dropdown-divider"></div>
         </li> -->
         <li>
-          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
+          <a class="dropdown-item" id="logout_button">
             <i class="bx bx-power-off me-2"></i>
             <span class="align-middle">Log Out</span>
           </a>
@@ -59,3 +59,32 @@
     </li>
   </ul>
 </nav>
+
+<script>
+  const logoutBtn = document.querySelector('#logout_button');
+
+  logoutBtn.addEventListener('click', function() {
+    swal({
+      title: 'Logout!',
+      text: 'Are you sure you want to logout?',
+      icon: 'warning',
+      buttons: ['No, later', 'Yes, logout'],
+      dangerMode: true,
+    }).then((result) => {
+      if (result) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("logout") }}';
+
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        form.appendChild(csrfToken);
+        
+        document.body.appendChild(form);
+        form.submit();
+      }
+    });
+  })
+</script>

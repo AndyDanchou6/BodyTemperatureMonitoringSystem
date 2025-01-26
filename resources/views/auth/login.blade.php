@@ -66,10 +66,14 @@
                         <h4 class="mb-2">Welcome!</h4>
                         <p class="mb-4">Please sign-in to your account</p>
 
-                        <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+                        <form id="formAuthentication" class="mb-3" action="/loginHandler" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus />
+                                @if ($errors->has('email'))
+                                <span class="text-danger">{{ $errors->first('email') }}</span>
+                                @endif
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between">
@@ -81,7 +85,6 @@
                             </div>
 
                             <div class="mb-3"><button class="btn btn-primary d-grid w-100" type="submit">Sign in</button></div>
-
                         </form>
                     </div>
                 </div>
