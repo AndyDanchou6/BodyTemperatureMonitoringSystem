@@ -27,9 +27,10 @@
                         <td>{{ $tempRecord->body_temperature }} &deg;C</td>
                         <td>{{ $tempRecord->created_at->format('F d, Y h:i a') }}</td>
                         <td>
-                            <a href="#" class="bx bx-trash me-1" data-bs-toggle="modal" data-bs-target="#">
+                            <a href="#" class="bx bx-trash me-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{$tempRecord->id}}">
                                 <i class="fas fa-trash"></i>
                             </a>
+                            @include('students.modal.temperatureDelete')
                         </td>
                     </tr>
                     @endforeach

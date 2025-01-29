@@ -29,5 +29,11 @@
         <div>Student Info</div>
       </a>
     </li>
+    <li class="menu-item">
+      <a href="{{ route('temperature.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div>Temperature Records</div>
+      </a>
+    </li>
   </ul>
 </aside>

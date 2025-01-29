@@ -1,4 +1,4 @@
-<div class="modal fade" id="deleteModal{{$list->id}}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deleteModal{{$tempRecord->id}}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,7 +12,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     Close
                 </button>
-                <form id="deleteModal{{$list->id}}" action="{{ route('temperature.delete', $list->id) }}" method="POST">
+                <form id="deleteModal{{$tempRecord->id}}" action="{{ route('temperature.delete', $tempRecord->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>

@@ -14,7 +14,9 @@ class TemperatureRecordsController extends Controller
      */
     public function index()
     {
-        //
+        $temperature = Temperature_records::with('studentInfo')->get();
+
+        return view('records.index', compact('temperature'));
     }
 
     /**
@@ -78,9 +80,13 @@ class TemperatureRecordsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Temperature_records $temperature_records)
+    public function destroy(string $id)
     {
-        //
+        $temperatureID = Temperature_records::findOrFail($id);
+
+        $temperatureID->delete();
+
+        return redirect()->route('temperature.index')->with('success', 'Temperature Successfully Deleted');
     }
 
     public function temperatureReading(Request $request)
