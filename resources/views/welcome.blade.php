@@ -224,14 +224,18 @@
             tempRead.bind('temp_reading_channel', function(data) {
 
                 if (data.status == 200) {
-                    document.getElementById('inputFahrenheit').value = data.data;
-
                     var student_id = document.querySelector('#student_id').value;
-                    var submitBtn = document.querySelector('#recordTempBtn');
+
+                    if (student_id !== '') {
+                        document.getElementById('inputFahrenheit').value = data.data;
+                    }
+
                     var studentTemp = {
                         student_id: student_id,
                         temp: data.data,
                     }
+
+                    var submitBtn = document.querySelector('#recordTempBtn');
 
                     submitBtn.addEventListener('click', function() {
                         fetch('https://bodytempmonitor.test/api/temperature_records/store', {
