@@ -134,8 +134,8 @@
             cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
         });
 
-        var scanCard = pusher.subscribe("rfid-scanner_channel");
-        scanCard.bind("rfid-scanner_channel", function(data) {
+        var scanCard = pusher.subscribe("new-user");
+        scanCard.bind("new-user", function(data) {
             if (data.status == 200) {
                 document.getElementById("edit_student_id").value = data.data;
                 document.getElementById("rfid-warning").classList.add('hidden');

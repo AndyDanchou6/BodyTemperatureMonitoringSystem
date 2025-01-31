@@ -250,6 +250,12 @@ class StudentInfoController extends Controller
                     'data' => $student_info,
                 ]);
 
+                $pusher->trigger('new-user', 'create-new-user', [
+                    'message' => 'Id already used. Scan another RFID',
+                    'status' => 409,
+                    'data' => $student_info,
+                ]);
+
                 return response()->json([
                     'message' => 'User Found',
                     'data' => $student_info,
@@ -268,6 +274,12 @@ class StudentInfoController extends Controller
                 $pusher->trigger('idSensor_channel', 'id-detected', [
                     'status' => 404,
                     'message' => 'RFID Card Not Registered!',
+                ]);
+
+                $pusher->trigger('new-user', 'create-new-user', [
+                    'message' => 'Id usable. Id can be used to create user',
+                    'status' => 200,
+                    'data' => $student_info,
                 ]);
 
                 return response()->json([
