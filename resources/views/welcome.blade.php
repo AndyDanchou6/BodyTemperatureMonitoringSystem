@@ -39,7 +39,21 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
     <!-- Page CSS -->
+    <style>
+        @keyframes fade {
+            0% {
+                opacity: 1;
+            }
 
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* #rfidOverlay {
+            animation: fade 1s ease-in-out;
+        } */
+    </style>
     <!-- Helpers -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 
@@ -47,6 +61,7 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 </head>
+
 
 <body>
     <div id="rfidOverlay" style="
@@ -207,7 +222,11 @@
             }
 
             function hideOverlay() {
-                document.getElementById("rfidOverlay").style.display = "none";
+                document.getElementById("rfidOverlay").style.animation = "fade 2s ease-in-out";
+
+                setTimeout(() => {
+                    document.getElementById("rfidOverlay").style.display = "none";
+                }, 2000);
             }
 
             showOverlay();
@@ -268,7 +287,7 @@
                         document.getElementById('inputFahrenheit').value = data.data;
                         var temp = document.querySelector('#inputFahrenheit').value;
 
-                        var studentTemp = {
+                        studentTemp = {
                             student_id: student_id,
                             temp: temp,
                         }
@@ -283,40 +302,40 @@
             var submitBtn = document.querySelector('#recordTempBtn');
 
             submitBtn.addEventListener('click', function() {
-                console.log(studentTemp);
-                // fetch('/api/temperature_records/store', {
-                //         method: 'POST', // Set the method to POST
-                //         headers: {
-                //             'Content-Type': 'application/json', // The type of data you're sending
-                //         },
-                //         body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
-                //     })
-                //     .then(response => response.json()) // Parse the response as JSON
-                //     .then(data => {
-                //         console.log('Success:', data);
-                //         if (data.status_code == 200) {
-                //             swal({
-                //                 title: data.message,
-                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " has been recorded",
-                //                 icon: "success",
-                //                 button: "Ok",
-                //             }).then(() => {
-                //                 window.location.reload();
-                //             });
-                //         } else {
-                //             swal({
-                //                 title: data.message,
-                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " not recorded",
-                //                 icon: "danger",
-                //                 button: "Ok",
-                //             }).then(() => {
-                //                 window.location.reload();
-                //             });
-                //         }
-                //     })
-                //     .catch((error) => {
-                //         console.error('Error:', error);
-                //     });
+                // console.log(studentTemp);
+                fetch('/api/temperature_records/store', {
+                        method: 'POST', // Set the method to POST
+                        headers: {
+                            'Content-Type': 'application/json', // The type of data you're sending
+                        },
+                        body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
+                    })
+                    .then(response => response.json()) // Parse the response as JSON
+                    .then(data => {
+                        console.log('Success:', data);
+                        if (data.status_code == 200) {
+                            swal({
+                                title: data.message,
+                                text: "Student Info:" + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C has been recorded.",
+                                icon: "success",
+                                button: "Ok",
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            swal({
+                                title: data.message,
+                                text: "Student Info: " + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C is not recorded.",
+                                icon: "danger",
+                                button: "Ok",
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
             })
         </script>
 </body>

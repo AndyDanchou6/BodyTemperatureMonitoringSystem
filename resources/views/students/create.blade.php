@@ -131,7 +131,8 @@
         pusher.unsubscribe('idSensor_channel');
 
         var scanCard = pusher.subscribe("new-user");
-        scanCard.bind("new-user", function(data) {
+        scanCard.bind("create-new-user", function(data) {
+            console.log(data);
             if (data.status == 200) {
                 document.getElementById("student_id").value = data.data;
                 document.getElementById("rfid-warning").classList.add('hidden');

@@ -38,7 +38,7 @@ Route::middleware('auth')->prefix('students')->group(function () {
     Route::delete('/delete/{id}', [StudentInfoController::class, 'delete'])->name('students.delete');
     Route::put('/update/{id}', [StudentInfoController::class, 'update'])->name('students.update');
     Route::get('/tempRecords/{id}', [StudentInfoController::class, 'tempRecords'])->name('students.tempRecords');
-    Route::delete('/delete/{id}', [StudentInfoController::class, 'TemperatureDestroy'])->name('temperature.delete');
+    Route::delete('/deleteTemp/{id}', [StudentInfoController::class, 'TemperatureDestroy'])->name('temperature.delete');
 });
 
 Route::prefix('/temperature')->group(function () {

@@ -279,7 +279,7 @@ class StudentInfoController extends Controller
                 $pusher->trigger('new-user', 'create-new-user', [
                     'message' => 'Id usable. Id can be used to create user',
                     'status' => 200,
-                    'data' => $student_info,
+                    'data' => $student_id,
                 ]);
 
                 return response()->json([

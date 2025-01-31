@@ -135,16 +135,17 @@
         });
 
         var scanCard = pusher.subscribe("new-user");
-        scanCard.bind("new-user", function(data) {
+        scanCard.bind("create-new-user", function(data) {
             if (data.status == 200) {
                 document.getElementById("edit_student_id").value = data.data;
                 document.getElementById("rfid-warning").classList.add('hidden');
                 document.getElementById("success").classList.remove('hidden');
                 document.getElementById("card").classList.add('hidden');
             } else if (data.status == 409) {
+                document.getElementById("edit_student_id").value = data.data.student_id;
                 document.getElementById("rfid-warning").classList.remove('hidden');
                 document.getElementById("success").classList.add('hidden');
-                document.getElementById("failed").classList.remove('hidden');
+                document.getElementById("failed").classList.remove('hidden'); 
             } else {
                 console.error("Failed to retrieve RFID tag.");
             }
@@ -155,4 +156,6 @@
         });
     });
 </script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
 @endsection
