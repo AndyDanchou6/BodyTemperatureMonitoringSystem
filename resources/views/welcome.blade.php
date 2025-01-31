@@ -232,6 +232,8 @@
                     document.getElementById('course').value = data.data.course;
                     document.getElementById('year_level').value = data.data.year_level;
 
+                    hideOverlay();
+
                 } else {
                     swal({
                         title: data.message,
@@ -239,6 +241,8 @@
                         icon: "warning",
                         button: "Ok",
                     });
+
+                    showOverlay();
                 }
             });
             scanCard.bind('pusher:subscription_error', function(status) {
@@ -252,6 +256,8 @@
                 cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
             });
 
+            var studentTemp = [];
+
             var tempRead = pusher.subscribe('temp_reading_channel');
             tempRead.bind('temp_reading_channel', function(data) {
 
@@ -260,56 +266,58 @@
 
                     if (student_id !== '') {
                         document.getElementById('inputFahrenheit').value = data.data;
+                        var temp = document.querySelector('#inputFahrenheit').value;
+
+                        var studentTemp = {
+                            student_id: student_id,
+                            temp: temp,
+                        }
                     }
-
-                    var studentTemp = {
-                        student_id: student_id,
-                        temp: data.data,
-                    }
-
-                    var submitBtn = document.querySelector('#recordTempBtn');
-
-                    submitBtn.addEventListener('click', function() {
-                        fetch('https://bodytempmonitor.test/api/temperature_records/store', {
-                                method: 'POST', // Set the method to POST
-                                headers: {
-                                    'Content-Type': 'application/json', // The type of data you're sending
-                                },
-                                body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
-                            })
-                            .then(response => response.json()) // Parse the response as JSON
-                            .then(data => {
-                                console.log('Success:', data);
-                                if (data.status_code == 200) {
-                                    swal({
-                                        title: data.message,
-                                        text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " has been recorded",
-                                        icon: "success",
-                                        button: "Ok",
-                                    }).then(() => {
-                                        window.location.reload();
-                                    });
-                                } else {
-                                    swal({
-                                        title: data.message,
-                                        text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " not recorded",
-                                        icon: "danger",
-                                        button: "Ok",
-                                    }).then(() => {
-                                        window.location.reload();
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.error('Error:', error);
-                            });
-
-                    })
                 }
             });
             tempRead.bind('pusher:subscription_error', function(status) {
                 console.error('Subscription error:', status);
             });
+
+            // submit event listener
+            var submitBtn = document.querySelector('#recordTempBtn');
+
+            submitBtn.addEventListener('click', function() {
+                console.log(studentTemp);
+                // fetch('/api/temperature_records/store', {
+                //         method: 'POST', // Set the method to POST
+                //         headers: {
+                //             'Content-Type': 'application/json', // The type of data you're sending
+                //         },
+                //         body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
+                //     })
+                //     .then(response => response.json()) // Parse the response as JSON
+                //     .then(data => {
+                //         console.log('Success:', data);
+                //         if (data.status_code == 200) {
+                //             swal({
+                //                 title: data.message,
+                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " has been recorded",
+                //                 icon: "success",
+                //                 button: "Ok",
+                //             }).then(() => {
+                //                 window.location.reload();
+                //             });
+                //         } else {
+                //             swal({
+                //                 title: data.message,
+                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " not recorded",
+                //                 icon: "danger",
+                //                 button: "Ok",
+                //             }).then(() => {
+                //                 window.location.reload();
+                //             });
+                //         }
+                //     })
+                //     .catch((error) => {
+                //         console.error('Error:', error);
+                //     });
+            })
         </script>
 </body>
 
