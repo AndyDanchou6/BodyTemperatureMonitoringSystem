@@ -35,7 +35,10 @@
                         <label for="student_id" class="form-label">Student ID</label>
                         <div class="input-group">
                             <input type="text" class="form-control" name="student_id" id="edit_student_id" placeholder="Scan your RFID Card" value="{{ $students->student_id }}" aria-describedby="student_id_help" readonly />
-                            <span class="input-group-text" id="iconEdit">
+                            <span class="input-group-text" id="iconDelete">
+                                <i class="bx bx-trash text-danger" id="trash"></i>
+                            </span>
+                            <span class="input-group-text hidden" id="iconEdit">
                                 <i class="bx bx-id-card text-success" id="card"></i>
                                 <i class="bx bx-check text-success hidden" id="success"></i>
                                 <i class="bx bx-x-circle text-danger hidden" id="failed"></i>
@@ -135,13 +138,17 @@
         });
 
         var scanCard = pusher.subscribe("new-user");
-        scanCard.bind("new-user", function(data) {
+        scanCard.bind("create-new-user", function(data) {
             if (data.status == 200) {
                 document.getElementById("edit_student_id").value = data.data;
+                document.getElementById("iconEdit").classList.remove('hidden');
                 document.getElementById("rfid-warning").classList.add('hidden');
                 document.getElementById("success").classList.remove('hidden');
                 document.getElementById("card").classList.add('hidden');
+                document.getElementById("failed").classList.add('hidden');
             } else if (data.status == 409) {
+                document.getElementById("edit_student_id").value = data.data.student_id;
+                document.getElementById("iconEdit").classList.add('hidden');
                 document.getElementById("rfid-warning").classList.remove('hidden');
                 document.getElementById("success").classList.add('hidden');
                 document.getElementById("failed").classList.remove('hidden');
@@ -155,4 +162,6 @@
         });
     });
 </script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
 @endsection

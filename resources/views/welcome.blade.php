@@ -39,7 +39,21 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
     <!-- Page CSS -->
+    <style>
+        @keyframes fade {
+            0% {
+                opacity: 1;
+            }
 
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* #rfidOverlay {
+            animation: fade 1s ease-in-out;
+        } */
+    </style>
     <!-- Helpers -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
 
@@ -47,6 +61,7 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 </head>
+
 
 <body>
     <div id="rfidOverlay" style="
@@ -160,7 +175,10 @@
                                             <form id="temp-reading" method="POST">
                                                 <div class="mb-3">
                                                     <label for=temperature" class="form-label">Temparature</label>
-                                                    <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control" step="any">
+                                                    <input id="inputFahrenheit" type="number" placeholder="Waiting for temperature data" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control" step="any" readonly>
+                                                    <div id="temp-message" class="form-text text-gray">
+                                                        <strong>Note:</strong> Press the scan button to send temperature
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <button class="btn btn-success" id="recordTempBtn" type="button">Submit</button>
@@ -207,7 +225,11 @@
             }
 
             function hideOverlay() {
-                document.getElementById("rfidOverlay").style.display = "none";
+                document.getElementById("rfidOverlay").style.animation = "fade 2s ease-in-out";
+
+                setTimeout(() => {
+                    document.getElementById("rfidOverlay").style.display = "none";
+                }, 2000);
             }
 
             showOverlay();
@@ -224,14 +246,15 @@
             scanCard.bind('id-detected', function(data) {
 
                 if (data.status == 200) {
-                    console.log(data.data.student_id);
+                    // console.log(data.data.student_id);
 
                     document.getElementById('profile_img').src = "{{ asset('/storage/') }}" + "/" + data.data.avatar || '';
                     document.getElementById('student_id').value = data.data.student_id;
                     document.getElementById('name').value = data.data.name;
                     document.getElementById('course').value = data.data.course;
                     document.getElementById('year_level').value = data.data.year_level;
-
+                    document.getElementById('inputFahrenheit').value = "";
+                    var note = document.querySelector('#temp-message').style.display = 'block';
                     hideOverlay();
 
                 } else {
@@ -240,6 +263,8 @@
                         text: "Please register your RFID card or use a different one.",
                         icon: "warning",
                         button: "Ok",
+                    }).then(() => {
+                        window.location.reload();
                     });
 
                     showOverlay();
@@ -262,13 +287,16 @@
             tempRead.bind('temp_reading_channel', function(data) {
 
                 if (data.status == 200) {
+                    var name = document.querySelector('#name').value;
                     var student_id = document.querySelector('#student_id').value;
+                    var note = document.querySelector('#temp-message').style.display = 'none';
 
                     if (student_id !== '') {
                         document.getElementById('inputFahrenheit').value = data.data;
                         var temp = document.querySelector('#inputFahrenheit').value;
 
-                        var studentTemp = {
+                        studentTemp = {
+                            name: name,
                             student_id: student_id,
                             temp: temp,
                         }
@@ -284,39 +312,41 @@
 
             submitBtn.addEventListener('click', function() {
                 console.log(studentTemp);
-                // fetch('/api/temperature_records/store', {
-                //         method: 'POST', // Set the method to POST
-                //         headers: {
-                //             'Content-Type': 'application/json', // The type of data you're sending
-                //         },
-                //         body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
-                //     })
-                //     .then(response => response.json()) // Parse the response as JSON
-                //     .then(data => {
-                //         console.log('Success:', data);
-                //         if (data.status_code == 200) {
-                //             swal({
-                //                 title: data.message,
-                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " has been recorded",
-                //                 icon: "success",
-                //                 button: "Ok",
-                //             }).then(() => {
-                //                 window.location.reload();
-                //             });
-                //         } else {
-                //             swal({
-                //                 title: data.message,
-                //                 text: "Student " + studentTemp.student_id + " with " + studentTemp.temp + " not recorded",
-                //                 icon: "danger",
-                //                 button: "Ok",
-                //             }).then(() => {
-                //                 window.location.reload();
-                //             });
-                //         }
-                //     })
-                //     .catch((error) => {
-                //         console.error('Error:', error);
-                //     });
+                fetch('/api/temperature_records/store', {
+                        method: 'POST', // Set the method to POST
+                        headers: {
+                            'Content-Type': 'application/json', // The type of data you're sending
+                        },
+                        body: JSON.stringify(studentTemp), // Convert the data object to a JSON string
+                    })
+                    .then(response => response.json()) // Parse the response as JSON
+                    .then(data => {
+                        console.log('Success:', data);
+                        if (data.status_code == 200) {
+                            swal({
+                                title: data.message,
+                                text: "Student Info: " + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C has been recorded.",
+                                icon: "success",
+                                button: "Ok",
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            swal({
+                                title: data.message,
+                                text: "Student Info: " + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C is not recorded.",
+                                icon: "danger",
+                                button: "Ok",
+                            }).then((reload) => {
+                                if (reload) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
             })
         </script>
 </body>
