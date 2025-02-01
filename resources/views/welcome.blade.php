@@ -175,7 +175,10 @@
                                             <form id="temp-reading" method="POST">
                                                 <div class="mb-3">
                                                     <label for=temperature" class="form-label">Temparature</label>
-                                                    <input id="inputFahrenheit" type="number" placeholder="Fahrenheit" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control" step="any">
+                                                    <input id="inputFahrenheit" type="number" placeholder="Waiting for temperature data" oninput="temperatureConverter(this.value)" onchange="temperatureConverter(this.value)" class="form-control" step="any" readonly>
+                                                    <div id="temp-message" class="form-text text-gray">
+                                                        <strong>Note:</strong> Press the scan button to send temperature
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <button class="btn btn-success" id="recordTempBtn" type="button">Submit</button>
@@ -243,14 +246,15 @@
             scanCard.bind('id-detected', function(data) {
 
                 if (data.status == 200) {
-                    console.log(data.data.student_id);
+                    // console.log(data.data.student_id);
 
                     document.getElementById('profile_img').src = "{{ asset('/storage/') }}" + "/" + data.data.avatar || '';
                     document.getElementById('student_id').value = data.data.student_id;
                     document.getElementById('name').value = data.data.name;
                     document.getElementById('course').value = data.data.course;
                     document.getElementById('year_level').value = data.data.year_level;
-
+                    document.getElementById('inputFahrenheit').value = "";
+                    var note = document.querySelector('#temp-message').style.display = 'block';
                     hideOverlay();
 
                 } else {
@@ -259,6 +263,8 @@
                         text: "Please register your RFID card or use a different one.",
                         icon: "warning",
                         button: "Ok",
+                    }).then(() => {
+                        window.location.reload();
                     });
 
                     showOverlay();
@@ -281,13 +287,16 @@
             tempRead.bind('temp_reading_channel', function(data) {
 
                 if (data.status == 200) {
+                    var name = document.querySelector('#name').value;
                     var student_id = document.querySelector('#student_id').value;
+                    var note = document.querySelector('#temp-message').style.display = 'none';
 
                     if (student_id !== '') {
                         document.getElementById('inputFahrenheit').value = data.data;
                         var temp = document.querySelector('#inputFahrenheit').value;
 
                         studentTemp = {
+                            name: name,
                             student_id: student_id,
                             temp: temp,
                         }
@@ -302,7 +311,7 @@
             var submitBtn = document.querySelector('#recordTempBtn');
 
             submitBtn.addEventListener('click', function() {
-                // console.log(studentTemp);
+                console.log(studentTemp);
                 fetch('/api/temperature_records/store', {
                         method: 'POST', // Set the method to POST
                         headers: {
@@ -316,7 +325,7 @@
                         if (data.status_code == 200) {
                             swal({
                                 title: data.message,
-                                text: "Student Info:" + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C has been recorded.",
+                                text: "Student Info: " + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C has been recorded.",
                                 icon: "success",
                                 button: "Ok",
                             }).then(() => {
@@ -328,8 +337,10 @@
                                 text: "Student Info: " + studentTemp.name + " with a temperature of " + studentTemp.temp + "°C is not recorded.",
                                 icon: "danger",
                                 button: "Ok",
-                            }).then(() => {
-                                window.location.reload();
+                            }).then((reload) => {
+                                if (reload) {
+                                    window.location.reload();
+                                }
                             });
                         }
                     })

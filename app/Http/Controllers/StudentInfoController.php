@@ -66,7 +66,7 @@ class StudentInfoController extends Controller
     // {
     //     try {
     //         $studentInfoValidation = Validator::make($request->all(), [
-    //             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //             'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
     //             'student_id' => 'nullable|string',
     //             'name' => 'required|string',
     //             'course' => 'required|string',
@@ -86,10 +86,10 @@ class StudentInfoController extends Controller
     //         $newStudentInfo->course = $request->input('course');
     //         $newStudentInfo->year_level = $request->input('year_level');
 
-    //         // if ($request->hasFile('avatar')) {
-    //         //     $avatarPath = $request->file('avatar')->store('avatar', 'public');
-    //         //     $newStudentInfo->avatar = $avatarPath;
-    //         // }
+    //         if ($request->hasFile('avatar')) {
+    //             $avatarPath = $request->file('avatar')->store('avatar', 'public');
+    //             $newStudentInfo->avatar = $avatarPath;
+    //         }
 
     //         if (!$newStudentInfo->save()) {
     //             return response()->json([
@@ -111,7 +111,7 @@ class StudentInfoController extends Controller
     {
         try {
             $studentInfoValidation = Validator::make($request->all(), [
-                // 'avatar' => 'string',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'student_id' => 'string',
                 'name' => 'required|string',
                 'course' => 'required|string',

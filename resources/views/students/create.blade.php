@@ -20,73 +20,71 @@
             <!-- Form Start -->
             <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div>
+                <div class="row mb-3">
+                    <label for="avatar" class="form-label">Avatar</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" name="avatar" id="userAvatar" aria-describedby="name_help" required />
+                        <small id="userAvatarFileError" class="form-text text-danger text-wrap hidden">The selected file exceeds 2 MB. Please choose a smaller file.</small>
+                    </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <label for="avatar" class="form-label">Avatar</label>
+                <div class="row mb-3">
+                    <label for="student_id" class="form-label">Student ID</label>
+                    <div class="col">
                         <div class="input-group">
-                            <input type="file" class="form-control" name="avatar" id="userAvatar" aria-describedby="name_help" />
-                            <small id="userAvatarFileError" class="form-text text-danger text-wrap hidden">The selected file exceeds 2 MB. Please choose a smaller file.</small>
+                            <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Scan your RFID Card" aria-describedby="student_id_help" required readonly />
+                            <span class="input-group-text hidden" id="icon">
+                                <i class="bx bx-check text-success hidden" id="success"></i>
+                                <i class="bx bx-x-circle text-danger hidden" id="failed"></i>
+                            </span>
+                        </div>
+                        <div id="rfid-warning" class="form-text hidden text-danger">
+                            <strong>Warning:</strong> This RFID Card is already registered. Please use a different RFID card.
+                        </div>
+
+                        <div id="rfid-danger" class="form-text hidden text-danger">
+                            <strong>Danger:</strong> Failed to retrieve RFID CARD!, please try again.
                         </div>
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <label for="student_id" class="form-label">Student ID</label>
-                        <div class="col">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Scan your RFID Card" aria-describedby="student_id_help" readonly />
-                                <span class="input-group-text hidden" id="icon">
-                                    <i class="bx bx-check text-success hidden" id="success"></i>
-                                    <i class="bx bx-x-circle text-danger hidden" id="failed"></i>
-                                </span>
-                            </div>
-                            <div id="rfid-warning" class="form-text hidden text-danger">
-                                <strong>Warning:</strong> This RFID Card is already registered. Please use a different RFID card.
-                            </div>
-
-                            <div id="rfid-danger" class="form-text hidden text-danger">
-                                <strong>Danger:</strong> Failed to retrieve RFID CARD!, please try again.
-                            </div>
-                        </div>
+                <div class="row mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" aria-describedby="name_help" />
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" aria-describedby="name_help" />
-                        </div>
+                <div class="row mb-3">
+                    <label for="defaultSelect" class="form-label">Course</label>
+                    <div class="input-group">
+                        <select id="defaultSelect" name="course" class="form-select" required>
+                            <option value="" disabled selected>Choose Course</option>
+                            <option value="BSIT">BSIT</option>
+                            <option value="BEED">BEED</option>
+                            <option value="BSED-SS">BSED-SS</option>
+                            <option value="BSED-MATH">BSED-MATH</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <label for="defaultSelect" class="form-label">Course</label>
-                        <div class="input-group">
-                            <select id="defaultSelect" name="course" class="form-select">
-                                <option value="" disabled selected>Choose Course</option>
-                                <option value="BSIT">BSIT</option>
-                                <option value="BEED">BEED</option>
-                                <option value="BSED-SS">BSED-SS</option>
-                                <option value="BSED-MATH">BSED-MATH</option>
-                            </select>
-                        </div>
+                <div class="row mb-3">
+                    <label for="defaultSelect" class="form-label">Year Level</label>
+                    <div class="input-group">
+                        <select id="defaultSelect" name="year_level" class="form-select" required>
+                            <option value="" disabled selected>Year Level</option>
+                            <option value="1">1st year</option>
+                            <option value="2">2nd year</option>
+                            <option value="3">3rd year</option>
+                            <option value="4">4th year</option>
+                        </select>
                     </div>
+                </div>
+                <div class="row mb-3">
+                </div>
 
-                    <div class="row mb-3">
-                        <label for="defaultSelect" class="form-label">Year Level</label>
-                        <div class="input-group">
-                            <select id="defaultSelect" name="year_level" class="form-select">
-                                <option value="" disabled selected>Year Level</option>
-                                <option value="1">1st year</option>
-                                <option value="2">2nd year</option>
-                                <option value="3">3rd year</option>
-                                <option value="4">4th year</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{{ route('students.index') }}" class="btn btn-outline-danger">Close</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{{ route('students.index') }}" class="btn btn-outline-danger">Close</a>
             </form>
         </div>
     </div>
@@ -138,7 +136,9 @@
                 document.getElementById("rfid-warning").classList.add('hidden');
                 document.getElementById("icon").classList.remove('hidden');
                 document.getElementById("success").classList.remove('hidden');
+                document.getElementById("failed").classList.add('hidden');
             } else if (data.status == 409) {
+                document.getElementById("student_id").value = " ";
                 document.getElementById("rfid-warning").classList.remove('hidden');
                 document.getElementById("icon").classList.remove('hidden');
                 document.getElementById("success").classList.add('hidden');

@@ -23,8 +23,8 @@
                 </div>
               </div>
               <div class="flex-grow-1">
-                <span class="fw-semibold d-block">User Name</span>
-                <small class="text-muted">Role</small>
+                <span class="fw-semibold d-block">{{ auth()->user()->name }}</span>
+                <small class="text-muted">{{ auth()->user()->role }}</small>
               </div>
             </div>
           </a>
@@ -81,7 +81,7 @@
         csrfToken.name = '_token';
         csrfToken.value = '{{ csrf_token() }}';
         form.appendChild(csrfToken);
-        
+
         document.body.appendChild(form);
         form.submit();
       }
